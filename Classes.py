@@ -32,7 +32,13 @@ class Player(pygame.sprite.Sprite):
 
         if self.pos[y] % SUBTILES == 0:
             self.change[x] = self.speed * diro
-            
+
+        if self.change == [0,0]:
+            if not self.pos[x] % SUBTILES == 0:
+                self.change[y] = self.speed * diro
+            if not self.pos[y] % SUBTILES == 0:
+                self.change[x] = self.speed * diro
+
                   
     def rotate(self, con1, con2, rota1, rota2, fin1, fin2):
         if self.rotatable:      #If its allowed to rotate
@@ -63,15 +69,46 @@ class Enemy2(pygame.sprite.Sprite):
         self.rotation = "Left"
         self.state = 0
 
-class Tunnels(pygame.sprite.Sprite):
+class Tiles(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         
-        self.image = pygame.image.load("Tunnel.png").convert()
-        self.pos   = [[300,300]]
-        self.rect  = self.image.get_rect()
-        self.num   = 1
+        Up = pygame.image.load("TunnelU.png").convert()
+        Do = pygame.image.load("TunnelD.png").convert()
+        Le = pygame.image.load("TunnelL.png").convert()
+        Ri = pygame.image.load("TunnelR.png").convert()
+        a  = 0
+        u  = 1
+        d  = 2
+        l  = 3
+        r  = 4
+        
+        
+        self.texture     = {
+                            
+                            u : Up,
+                            d : Do,
+                            l : Le,
+                            r : Ri
+                            }
+        
         self.list  = pygame.sprite.Group()
+        self.tilemap = [#1 2 3  4 5 6  7 8 9 101112 13
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#1
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#2
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#3
+                        [a,a,[l,r], [l,r],[l,r],[l,r], [l,r],[l,r],[l,r], [l,r],[l,r],[l,r], [l,r],a, a],#4
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#5
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#6
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#7
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#8
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#9
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#10
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#11
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#12
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#13
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#14
+                        ]                               
                     
 
         

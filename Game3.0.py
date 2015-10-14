@@ -9,8 +9,6 @@ ALPHA = (255,   0, 255)
 
 FILL  = "I Don't Know!"                                     #My Filler Variable
 
-x = 1
-
 def main():
     """ Main Function of the Game """
     pygame.init()
@@ -18,16 +16,6 @@ def main():
     size = (1300,700)                                       #Set size of Window
     screen = pygame.display.set_mode(size)
     pygame.display.set_caption("Crusader Dig")              #Title
-
-#    l = 0
- #   r = 0
-  #  u = 0
-   # d = 0
-    #textures = {
-     #   l : pygame.image.load("TunnelL.png").convert(),
-      #  r : pygame.image.load("TunnelR.png").convert(),
-       # u : pygame.image.load("TunnelU.png").convert(),
-        #d : pygame.image.load("TunnelD.png").convert()}
 
     player  = Classes.Player()  #Sets Class Variable
     tunnels = Classes.Tiles()
@@ -91,13 +79,15 @@ def main():
         else:
             player.change = [0,0]
 
+        player.tunnelpos[0] = player.pos[0]/100
+        player.tunnelpos[1] = player.pos[1]/100 -2
+
+        backgroundcoord = [0,0]
+        screen.blit(background,backgroundcoord)
         
         for row in range(13):
             for column in range(12):
-                screen.blit(tunnels.texture[tunnels.tilemap[row][column]], [column*100,row*100])
-                                
-        backgroundcoord = [0,0]
-        screen.blit(background,backgroundcoord)
+                screen.blit(tunnels.texture[tunnels.tilemap[row][column]],(column*100,row*100+200))
 
         player.Image.set_colorkey(ALPHA)
         screen.blit(player.Image,player.pos)         #Draw Player
@@ -113,4 +103,4 @@ if __name__ == "__main__":
 
 
 
-                        
+                

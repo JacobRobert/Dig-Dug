@@ -25,6 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.imageLD = pygame.transform.rotate(self.imageR, -90)
         self.Image   = self.imageR
 
+        self.tunnelpos    = [2,0]
+
     def move(self,x,y,diro):
             
         if self.queue == 0:
@@ -55,49 +57,72 @@ class Player(pygame.sprite.Sprite):
                 self.Image = fin2
                 
             self.rotatable = False
+
             
-
-class Enemy1(pygame.sprite.Sprite):
-    def __init__(self):
-
-        self.rotation = "Left"
-        self.state = 0
-
-class Enemy2(pygame.sprite.Sprite):
-    def __init__(self):
-
-        self.rotation = "Left"
-        self.state = 0
 
 class Tiles(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        
+        Alpha = pygame.image.load("Alpha.png").convert()            #Load Images
+        Alpha.set_colorkey((255,255,255))
         Up = pygame.image.load("TunnelU.png").convert()
         Do = pygame.image.load("TunnelD.png").convert()
         Le = pygame.image.load("TunnelL.png").convert()
         Ri = pygame.image.load("TunnelR.png").convert()
+        UD = pygame.image.load("TunnelStraight.png").convert()
+        LR = pygame.transform.rotate(UD, 90)
+        UR = pygame.image.load("TunnelRight.png").convert()
+        UL = pygame.transform.flip(UR, True, False)
+        DL = pygame.transform.rotate(UR, 180)
+        DR = pygame.transform.flip(DL, True, False)
+        TR = pygame.image.load("Tunnel3.png").convert()
+        TD = pygame.transform.rotate(TR, -90)
+        TL = pygame.transform.rotate(TR, 180)
+        TU = pygame.transform.rotate(TR,  90)
+        AL = pygame.image.load("TunnelAll.png").convert()
+        
         a  = 0
         u  = 1
         d  = 2
         l  = 3
         r  = 4
-        
+        ud = 5
+        lr = 6
+        ur = 7
+        ul = 8
+        dr = 9
+        dl = 10
+        tr = 11
+        td = 12
+        tl = 13
+        tu = 14
+        al = 15
         
         self.texture     = {
-                            
-                            u : Up,
-                            d : Do,
-                            l : Le,
-                            r : Ri
+                            a : Alpha,  #a = None
+                            u : Up,     #u = Up
+                            d : Do,     #d = Down
+                            l : Le,     #l = Left
+                            r : Ri,     #r = Right
+                            ud: UD,
+                            lr: LR,
+                            ur: UR,
+                            ul: UL,
+                            dr: DR,
+                            dl: DL,
+                            tr: TR,     #Up Right Down
+                            td: TD,     #Left Down Right
+                            tl: TL,     #Up Left Down
+                            tu: TU,     #Left Up Right
+                            al: AL      #Left Right Up Down
                             }
         
         self.list  = pygame.sprite.Group()
         self.tilemap = [#1 2 3  4 5 6  7 8 9 101112 13
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#1
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#2
-                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#3
-                        [a,a,[l,r], [l,r],[l,r],[l,r], [l,r],[l,r],[l,r], [l,r],[l,r],[l,r], [l,r],a, a],#4
+                        [a,a,r, lr,lr,lr, lr,lr,lr, lr,l,a, a],#3
+                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#4
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#5
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#6
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#7
@@ -107,8 +132,30 @@ class Tiles(pygame.sprite.Sprite):
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#11
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#12
                         [a,a,a, a,a,a, a,a,a, a,a,a, a],#13
-                        [a,a,a, a,a,a, a,a,a, a,a,a, a],#14
-                        ]                               
+                        ]
+
+        def addtunnel(self, x, y, final):
+            if self.tilemap[y[x]] == a :
+            if self.tilemap[y[x]] == u :
+            if self.tilemap[y[x]] == d :
+            if self.tilemap[y[x]] == l :
+            if self.tilemap[y[x]] == r :
+            if self.tilemap[y[x]] == ud:
+            if self.tilemap[y[x]] == lr:
+            if self.tilemap[y[x]] == ur:
+            if self.tilemap[y[x]] == ul:
+            if self.tilemap[y[x]] == dr:
+            if self.tilemap[y[x]] == dl:
+            if self.tilemap[y[x]] == tr:
+            if self.tilemap[y[x]] == td:
+            if self.tilemap[y[x]] == tl:
+            if self.tilemap[y[x]] == tu:
+            if self.tilemap[y[x]] == 
+            
+            
+            
+            
+            
                     
 
         

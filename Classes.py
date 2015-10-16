@@ -81,23 +81,6 @@ class Tiles(pygame.sprite.Sprite):
         TU = pygame.transform.rotate(TR,  90)
         AL = pygame.image.load("TunnelAll.png").convert()
         
-      #  ob0111= 7
-     #   ob1011= 11
-    #    ob1101= 13
-   #     ob1110= 14 
-  #      ob0011= 3
- #       ob1100= 12
-#        ob0110= 6
-        #ob0101= 5
-       # ob1010= 10
-      #  ob1001= 9
-     #   ob0010= 2  
-    #    ob1000= 8
-   #     ob0001= 1 
-  #      ob0100= 4 
- #       ob0000= 0
-#        ob1111= 15  #Up  Down  Left  Right
-        
         self.texture     = {
                             0b1111: Alpha,  #Up  Down  Left  Right
                             0b0111: Up,  
@@ -135,4 +118,4 @@ class Tiles(pygame.sprite.Sprite):
                                                 ]
 
     def addtunnel(self, x, y, direction):
-        self.tilemap[y[x]] &= direction
+        self.tilemap[y][x] &= direction

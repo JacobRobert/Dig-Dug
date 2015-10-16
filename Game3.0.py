@@ -9,12 +9,6 @@ ALPHA = (255,   0, 255)
 
 FILL  = "I Don't Know!"                                     #My Filler Variable
 
-#ob0111 = 7
-#ob1011 = 12
-#ob1101 = 13
-#ob1110 = 14
-#ob1111 = 15
-
 def main():
     """ Main Function of the Game """
     pygame.init()
@@ -32,12 +26,11 @@ def main():
 
     done = False                                            #Set While Variable
     clock = pygame.time.Clock()
-
+    
+    obdiro = 0b1111
 
     while not done:
         """ Main Game Loop """
-
-        obdiro = 0b1111
     
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:           #X Exits
@@ -49,14 +42,14 @@ def main():
                     player.easy = True
                     player.move(0,1,-1)
                     player.rotatable = True
-                    obdiro = 0b1101
+                    obdiro = 0b1110
                     player.rotate(FILL,FILL, "Left",FILL, player.imageL, FILL)
 
                 if event.key == pygame.K_RIGHT:
                     player.easy = True
                     player.move(0,1, 1)
                     player.rotatable = True
-                    obdiro = 0b1110
+                    obdiro = 0b1101
                     player.rotate(FILL,FILL, "Right",FILL, player.imageR, FILL)
 
                 if event.key == pygame.K_UP:
@@ -64,14 +57,14 @@ def main():
                     player.move(1,0,-1)
                     player.rotatable = True
                     backgroundcoord = 1
-                    obdiro = 0b0111
+                    obdiro = 0b1011
                     player.rotate(["Left","LeftDown"],["Right","RightDown"],"LeftUp","RightUp", player.imageLU, player.imageRU)
 
                 if event.key == pygame.K_DOWN:
                     player.easy = False
                     player.move(1,0, 1)
                     player.rotatable = True
-                    obdiro = 0b1011
+                    obdiro = 0b0111
                     player.rotate(["Right","LeftUp"],["Left","RightUp"],"LeftDown","RightDown", player.imageLD, player.imageRD)
                     
 
@@ -90,10 +83,9 @@ def main():
         else:
             player.change = [0,0]
 
-        player.tunnelpos[0] = player.pos[0]/100
-        player.tunnelpos[1] = player.pos[1]/100 -2
-
         if player.change == [0,0]:
+            player.tunnelpos[0] = player.pos[0]//100
+            player.tunnelpos[1] = player.pos[1]//100 -2
             tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],obdiro)
 
         backgroundcoord = [0,0]

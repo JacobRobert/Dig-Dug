@@ -28,6 +28,7 @@ def main():
     clock = pygame.time.Clock()
     
     obdiro = 0b1111
+    indiro = 0b1111
 
     while not done:
         """ Main Game Loop """
@@ -43,6 +44,7 @@ def main():
                     player.move(0,1,-1)
                     player.rotatable = True
                     obdiro = 0b1110
+                    indiro = 0b1101
                     player.rotate(FILL,FILL, "Left",FILL, player.imageL, FILL)
 
                 if event.key == pygame.K_RIGHT:
@@ -50,6 +52,7 @@ def main():
                     player.move(0,1, 1)
                     player.rotatable = True
                     obdiro = 0b1101
+                    indiro = 0b1110
                     player.rotate(FILL,FILL, "Right",FILL, player.imageR, FILL)
 
                 if event.key == pygame.K_UP:
@@ -58,6 +61,7 @@ def main():
                     player.rotatable = True
                     backgroundcoord = 1
                     obdiro = 0b1011
+                    indiro = 0b0111
                     player.rotate(["Left","LeftDown"],["Right","RightDown"],"LeftUp","RightUp", player.imageLU, player.imageRU)
 
                 if event.key == pygame.K_DOWN:
@@ -65,6 +69,7 @@ def main():
                     player.move(1,0, 1)
                     player.rotatable = True
                     obdiro = 0b0111
+                    indiro = 0b1011
                     player.rotate(["Right","LeftUp"],["Left","RightUp"],"LeftDown","RightDown", player.imageLD, player.imageRD)
                     
 
@@ -86,7 +91,10 @@ def main():
         if player.change == [0,0]:
             player.tunnelpos[0] = player.pos[0]//100
             player.tunnelpos[1] = player.pos[1]//100 -2
-            tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],obdiro)
+            if not player.tunnelpos[1] == 0:
+                tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],obdiro)
+        if not player.tunnelpos[1] == 0:
+            tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],indiro)
 
         backgroundcoord = [0,0]
         screen.blit(background,backgroundcoord)

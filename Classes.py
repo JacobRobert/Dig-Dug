@@ -25,7 +25,9 @@ class Player(pygame.sprite.Sprite):
         self.imageLD = pygame.transform.rotate(self.imageR, -90)
         self.Image   = self.imageR
 
-        self.tunnelpos    = [2,0]
+        self.tunnelpos = [2,0]
+        self.inventory = 0
+        self.rect = self.Image.get_rect()
 
     def move(self,x,y,diro):
             
@@ -58,9 +60,24 @@ class Player(pygame.sprite.Sprite):
                 
             self.rotatable = False
 
-            
+class Objective(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image  = pygame.image.load("Objective.png").convert()
+        self.rect   = self.image.get_rect()
+        self.coord  = [[100,400],[300,600],[700,600]]
+        self.number = 3
+        
 
-class Tiles(pygame.sprite.Sprite):
+class Obstacle(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image  = pygame.image.load("Obstacle.png").convert()
+        self.coord  = [[200,400],[400,600],[400,300]]
+        self.rect   = self.image.get_rect()
+        self.number = 3
+
+class Tiles():
     def __init__(self):
         super().__init__()
         Alpha = pygame.image.load("Alpha.png").convert()            #Load Images

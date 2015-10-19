@@ -30,6 +30,22 @@ def main():
     obdiro = 0b1111
     indiro = 0b1111
 
+    objlist = pygame.sprite.Group()
+    obslist = pygame.sprite.Group()
+
+    for obj in range(3):
+        objective = Classes.Objective()
+        objective.rect.x = objective.coord[obj][0]
+        objective.rect.y = objective.coord[obj][1]
+        objlist.add(objective)
+            
+    for obs in range(3):
+        obstacle = Classes.Obstacle()
+        obstacle.rect.x = obstacle.coord[obs][0]
+        obstacle.rect.y = obstacle.coord[obs][1]
+        obslist.add(obstacle)            
+
+
     while not done:
         """ Main Game Loop """
     
@@ -87,6 +103,19 @@ def main():
             player.queue -= 1
         else:
             player.change = [0,0]
+            
+#        for obs in range(obstacle.number):
+ #           if player.pos[0] > obstacle.coord[obs][0]:
+  #              player.pos[0] = obstacle.coord[obs][0]
+   #         if player.pos[0] < obstacle.coord[obs][0]+100:
+    #            player.pos[0] = obstacle.coord[obs][0]+100
+     #       if player.pos[1] > obstacle.coord[obs][1]:
+      #          player.pos[1] = obstacle.coord[obs][1]
+       #     if player.pos[1] < obstacle.coord[obs][1]+100:
+        #        player.pos[1] = obstacle.coord[obs][1]+100
+                
+        player.rect.x = player.pos[0]
+        player.rect.y = player.pos[1]
 
         if player.change == [0,0]:
             player.tunnelpos[0] = player.pos[0]//100
@@ -96,12 +125,22 @@ def main():
         if not player.tunnelpos[1] == 0:
             tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],indiro)
 
+        if player.change == [0,0]:
+            objcollide = pygame.sprite.spritecollide(player,objlist,True)
+        #obscollide = pygame.sprite.spritecollide(player,obslist,False)
+
+        for objective in objcollide:
+            player.inventory +=1
+        
         backgroundcoord = [0,0]
         screen.blit(background,backgroundcoord)
         
         for row in range(13):
             for column in range(12):
                 screen.blit(tunnels.texture[tunnels.tilemap[row][column]],(column*100,row*100+200))
+
+        objlist.draw(screen)
+        obslist.draw(screen)
 
         player.Image.set_colorkey(ALPHA)
         screen.blit(player.Image,player.pos)         #Draw Player

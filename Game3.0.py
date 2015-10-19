@@ -104,15 +104,7 @@ def main():
         else:
             player.change = [0,0]
             
-#        for obs in range(obstacle.number):
- #           if player.pos[0] > obstacle.coord[obs][0]:
-  #              player.pos[0] = obstacle.coord[obs][0]
-   #         if player.pos[0] < obstacle.coord[obs][0]+100:
-    #            player.pos[0] = obstacle.coord[obs][0]+100
-     #       if player.pos[1] > obstacle.coord[obs][1]:
-      #          player.pos[1] = obstacle.coord[obs][1]
-       #     if player.pos[1] < obstacle.coord[obs][1]+100:
-        #        player.pos[1] = obstacle.coord[obs][1]+100
+        #obstacle.barrier(player.pos)
                 
         player.rect.x = player.pos[0]
         player.rect.y = player.pos[1]

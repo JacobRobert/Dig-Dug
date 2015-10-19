@@ -77,6 +77,21 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect   = self.image.get_rect()
         self.number = 3
 
+#    def barrier(self,playerpos):
+ #       for i in range(self.number):
+  #          if playerpos[1]>self.coord[i][1] and playerpos[1]<self.coord[i][1]+100:
+   #             if playerpos[0]<self.coord[i][0]+1 and playerpos[0]>self.coord[i][0]-100:
+    #                playerpos[0] = self.coord[i][0]-100
+     #           if playerpos[0]>self.coord[i][0] and playerpos[0]<self.coord[i][0]+100:
+      #              playerpos[0] = self.coord[i][0]+100
+       #     if playerpos[0]>self.coord[i][0] and playerpos[0]<self.coord[i][1]+100:
+        #        if playerpos[1]>self.coord[i][1]-99 and playerpos[1]<self.coord[i][1]:
+         #           playerpos[1] = self.coord[i][1]-100
+          #      if playerpos[1]<self.coord[i][1]+100 and playerpos[1]<self.coord[i][1]+200:
+           #         playerpos[1] = self.coord[i][1]+100
+            
+                    
+
 class Tiles():
     def __init__(self):
         super().__init__()

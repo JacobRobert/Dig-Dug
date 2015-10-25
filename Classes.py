@@ -26,22 +26,17 @@ class Player(pygame.sprite.Sprite):
         self.Image   = self.imageR
 
         self.tunnelpos = [2,0]
+        self.cachetunnel =[2,0]
         self.inventory = 0
         self.rect = self.Image.get_rect()
 
-    def move(self,x,y,diro):
+    def move(self,x,y,diro,obstacle):
             
         if self.queue == 0:
             self.queue += 24
 
         if self.pos[y] % SUBTILES == 0:
             self.change[x] = self.speed * diro
-
-        if self.change == [0,0]:
-            if not self.pos[x] % SUBTILES == 0:
-                self.change[y] = self.speed * diro
-            if not self.pos[y] % SUBTILES == 0:
-                self.change[x] = self.speed * diro
 
                   
     def rotate(self, con1, con2, rota1, rota2, fin1, fin2):
@@ -60,6 +55,59 @@ class Player(pygame.sprite.Sprite):
                 
             self.rotatable = False
 
+class Enemy1(pygame.sprite.Sprite):
+    def __init__(self,coord,tunnel,diro):
+        super().__init__()
+        self.image = pygame.image.load("Enemy1.png").convert()
+        self.rect  = self.image.get_rect()
+        self.coord = coord
+        self.change = [0,0]
+        self.tunne = tunnel
+        self.diro  = diro
+        
+    def move(self,matrix,change):
+        if self.diro == 0b0111:
+            diro1 = 0b1011
+            diro2 = 0b1101
+            diro3 = 0b1110
+            change  = [0,-4]
+            change1 = [0,4]
+            change2 = [-4,0]
+            change3 = [4,0]
+        if self.diro == 0b1011:
+            diro1 = 0b0111
+            diro2 = 0b1101
+            diro3 = 0b1110
+            change  = [0,4]
+            change1 = [0,-4]
+            change2 = [-4,0]
+            change3 = [4,0]
+        if self.diro == 0b1101:
+            diro1 = 0b0111
+            diro2 = 0b1011
+            diro3 = 0b1110
+            change  = [-4,0]
+            change1 = [0,-4]
+            change2 = [0,4]
+            change3 = [4,0]
+        if self.diro == 0b1110:
+            diro1 = 0b0111
+            diro2 = 0b1011
+            diro3 = 0b1101
+            change  = [4,0]
+            change1 = [0,-4]
+            change2 = [0,4]
+            change3 = [-4,0]
+        if matrix[self.tunne[1]][self.tunne[0]] == self.diro:
+            self.change = change
+        if matrix[self.tunne[1]][self.tunne[0]] == diro1:
+            self.change = change1
+        if matrix[self.tunne[1]][self.tunne[0]] == diro2:
+            self.change = change2
+        if matrix[self.tunne[1]][self.tunne[0]] == diro3:
+            self.change = change3
+        
+
 class Objective(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -76,25 +124,10 @@ class Obstacle(pygame.sprite.Sprite):
         self.coord  = [[200,400],[400,600],[400,300]]
         self.rect   = self.image.get_rect()
         self.number = 3
-
-#    def barrier(self,playerpos):
- #       for i in range(self.number):
-  #          if playerpos[1]>self.coord[i][1] and playerpos[1]<self.coord[i][1]+100:
-   #             if playerpos[0]<self.coord[i][0]+1 and playerpos[0]>self.coord[i][0]-100:
-    #                playerpos[0] = self.coord[i][0]-100
-     #           if playerpos[0]>self.coord[i][0] and playerpos[0]<self.coord[i][0]+100:
-      #              playerpos[0] = self.coord[i][0]+100
-       #     if playerpos[0]>self.coord[i][0] and playerpos[0]<self.coord[i][1]+100:
-        #        if playerpos[1]>self.coord[i][1]-99 and playerpos[1]<self.coord[i][1]:
-         #           playerpos[1] = self.coord[i][1]-100
-          #      if playerpos[1]<self.coord[i][1]+100 and playerpos[1]<self.coord[i][1]+200:
-           #         playerpos[1] = self.coord[i][1]+100
             
                     
-
 class Tiles():
     def __init__(self):
-        super().__init__()
         Alpha = pygame.image.load("Alpha.png").convert()            #Load Images
         Alpha.set_colorkey((255,255,255))
         Up = pygame.image.load("TunnelU.png").convert()

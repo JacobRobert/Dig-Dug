@@ -43,7 +43,12 @@ def main():
         obstacle = Classes.Obstacle()
         obstacle.rect.x = obstacle.coord[obs][0]
         obstacle.rect.y = obstacle.coord[obs][1]
-        obslist.add(obstacle)            
+        obslist.add(obstacle)
+
+    #for ene in range(2):
+     #   ecoord = [[]
+      #  enemy = Classes.Enemy1()
+        
 
 
     while not done:
@@ -57,7 +62,8 @@ def main():
                 
                 if event.key == pygame.K_LEFT:      
                     player.easy = True
-                    player.move(0,1,-1)
+                    if player.change == [0,0]:
+                        player.move(0,1,-1,obstacle)
                     player.rotatable = True
                     obdiro = 0b1110
                     indiro = 0b1101
@@ -65,7 +71,8 @@ def main():
 
                 if event.key == pygame.K_RIGHT:
                     player.easy = True
-                    player.move(0,1, 1)
+                    if player.change == [0,0]:
+                        player.move(0,1, 1,obstacle)
                     player.rotatable = True
                     obdiro = 0b1101
                     indiro = 0b1110
@@ -73,7 +80,8 @@ def main():
 
                 if event.key == pygame.K_UP:
                     player.easy = False
-                    player.move(1,0,-1)
+                    if player.change == [0,0]:
+                        player.move(1,0,-1,obstacle)
                     player.rotatable = True
                     backgroundcoord = 1
                     obdiro = 0b1011
@@ -82,12 +90,17 @@ def main():
 
                 if event.key == pygame.K_DOWN:
                     player.easy = False
-                    player.move(1,0, 1)
+                    if player.change == [0,0]:
+                        player.move(1,0, 1,obstacle)
                     player.rotatable = True
                     obdiro = 0b0111
                     indiro = 0b1011
                     player.rotate(["Right","LeftUp"],["Left","RightUp"],"LeftDown","RightDown", player.imageLD, player.imageRD)
-                    
+
+        if player.change[0] > 0 or player.change[0] < 0:
+            player.change[1]
+        if player.change[1] > 0 or player.change[1] < 0:
+            player.change[0]
 
         player.pos[0] += player.change[0]
         player.pos[1] += player.change[1]
@@ -104,7 +117,6 @@ def main():
         else:
             player.change = [0,0]
             
-        #obstacle.barrier(player.pos)
                 
         player.rect.x = player.pos[0]
         player.rect.y = player.pos[1]
@@ -114,12 +126,13 @@ def main():
             player.tunnelpos[1] = player.pos[1]//100 -2
             if not player.tunnelpos[1] == 0:
                 tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],obdiro)
-        if not player.tunnelpos[1] == 0:
-            tunnels.addtunnel(player.tunnelpos[0], player.tunnelpos[1],indiro)
+        else:
+            if not player.cachetunnel[1] == 0:
+                tunnels.addtunnel(player.cachetunnel[0],player.cachetunnel[1],indiro)
+            player.cachetunnel = player.tunnelpos
 
         if player.change == [0,0]:
-            objcollide = pygame.sprite.spritecollide(player,objlist,True)
-        #obscollide = pygame.sprite.spritecollide(player,obslist,False)
+            objcollide = pygame.sprite.spritecollide(player,objlist,True)    
 
         for objective in objcollide:
             player.inventory +=1

@@ -44,11 +44,7 @@ def main():
         obstacle.rect.x = obstacle.coord[obs][0]
         obstacle.rect.y = obstacle.coord[obs][1]
         obslist.add(obstacle)
-
-    #for ene in range(2):
-     #   ecoord = [[]
-      #  enemy = Classes.Enemy1()
-        
+       
 
 
     while not done:
@@ -98,9 +94,20 @@ def main():
                     player.rotate(["Right","LeftUp"],["Left","RightUp"],"LeftDown","RightDown", player.imageLD, player.imageRD)
 
         if player.change[0] > 0 or player.change[0] < 0:
-            player.change[1]
+            player.change[1] 
         if player.change[1] > 0 or player.change[1] < 0:
-            player.change[0]
+            player.change[0] 
+
+        
+        if player.rect.colliderect(obstacle.rect):
+            if player.change[0] > 0:
+                player.rect.right = obstacle.rect.left
+            if player.change[0] < 0:
+                player.rect.left = obstacle.rect.right
+            if player.change[1] > 0:
+                player.rect.bottom = obstacle.rect.top
+            if player.change[1] < 0:
+                player.rect.top = obstacle.rect.bottom
 
         player.pos[0] += player.change[0]
         player.pos[1] += player.change[1]

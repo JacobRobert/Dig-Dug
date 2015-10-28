@@ -38,6 +38,16 @@ class Player(pygame.sprite.Sprite):
         if self.pos[y] % SUBTILES == 0:
             self.change[x] = self.speed * diro
 
+        for o in range(3):
+            if self.rect.colliderect(obstacle.rect):
+                if self.change[0] > 0:
+                    self.rect.right = obstacle.rect.left
+                if self.change[0] < 0:
+                    self.rect.left = obstacle.rect.right
+                if self.change[1] > 0:
+                    self.rect.bottom = obstacle.rect.top
+                if self.change[1] < 0:
+                    self.rect.top = obstacle.rect.bottom
                   
     def rotate(self, con1, con2, rota1, rota2, fin1, fin2):
         if self.rotatable:      #If its allowed to rotate

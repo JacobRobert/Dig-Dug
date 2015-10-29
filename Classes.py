@@ -3,6 +3,7 @@ import random
 pygame.init()
 
 SUBTILES = 100
+ALPHA = (255,   0, 255)
 
 class Player(pygame.sprite.Sprite):                             
     def __init__(self):
@@ -17,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.easy = True        #Rotate to left or right
         self.speed = 4
         self.x = 0
-        self.imageR  = pygame.image.load("Robot.png").convert()
+        self.imageR  = pygame.image.load("robot2.png").convert()
         self.imageL  = pygame.transform.flip(self.imageR, True, False)
         self.imageRU = pygame.transform.rotate(self.imageR,  90)
         self.imageLU = pygame.transform.rotate(self.imageL, -90)
@@ -66,62 +67,49 @@ class Player(pygame.sprite.Sprite):
             self.rotatable = False
 
 class Enemy1(pygame.sprite.Sprite):
-    def __init__(self,coord,tunnel,diro):
+    def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("Enemy1.png").convert()
+        self.imagel = pygame.image.load("enemy.png").convert()
+        self.imager = pygame.transform.flip(self.imagel,True,False)
+        self.image = self.imager
+        self.image.set_colorkey(ALPHA)
         self.rect  = self.image.get_rect()
-        self.coord = coord
         self.change = [0,0]
-        self.tunne = tunnel
-        self.diro  = diro
+        self.tunne = [3,4]
+        self.diro  = "left"
+        self.delay = 0
         
-    def move(self,matrix,change):
-        if self.diro == 0b0111:
-            diro1 = 0b1011
-            diro2 = 0b1101
-            diro3 = 0b1110
-            change  = [0,-4]
-            change1 = [0,4]
-            change2 = [-4,0]
-            change3 = [4,0]
-        if self.diro == 0b1011:
-            diro1 = 0b0111
-            diro2 = 0b1101
-            diro3 = 0b1110
-            change  = [0,4]
-            change1 = [0,-4]
-            change2 = [-4,0]
-            change3 = [4,0]
-        if self.diro == 0b1101:
-            diro1 = 0b0111
-            diro2 = 0b1011
-            diro3 = 0b1110
-            change  = [-4,0]
-            change1 = [0,-4]
-            change2 = [0,4]
-            change3 = [4,0]
-        if self.diro == 0b1110:
-            diro1 = 0b0111
-            diro2 = 0b1011
-            diro3 = 0b1101
-            change  = [4,0]
-            change1 = [0,-4]
-            change2 = [0,4]
-            change3 = [-4,0]
-        if matrix[self.tunne[1]][self.tunne[0]] == self.diro:
-            self.change = change
-        if matrix[self.tunne[1]][self.tunne[0]] == diro1:
-            self.change = change1
-        if matrix[self.tunne[1]][self.tunne[0]] == diro2:
-            self.change = change2
-        if matrix[self.tunne[1]][self.tunne[0]] == diro3:
-            self.change = change3
+    def update(self):
+        if self.delay == 120:
+            if self.diro == "left":
+                self.diro = "right"
+                self.image = self.imager
+                self.image.set_colorkey(ALPHA)
+            if self.diro == "right":
+                self.diro = "left"
+                self.image = self.imagel
+                self.image.set_colorkey(ALPHA)
+            self.delay = 0
+        else:
+            self.delay += 1
+        print(self.delay)
+
+class projectile:
+    def __init__(self):
+        super().__init__()
+        self.imager1 = pygame.image.load("water1.png").convert()
+        self.imager2 = pygame.image.load("water2.png").convert()
+        self.imager3 = pygame.image.load("water3.png").convert()
+        self.imagel1 = pygame.transform.flip(self.imager1,True,False)
+        self.imagel2 = pygame.transform.flip(self.imager2,True,False)
+        self.imagel3 = pygame.transform.flip(self.imager3,True,False)
         
 
 class Objective(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image  = pygame.image.load("Objective.png").convert()
+        self.image  = pygame.image.load("Crystal.png").convert()
+        self.image.set_colorkey(ALPHA)
         self.rect   = self.image.get_rect()
         self.coord  = [[100,400],[300,600],[700,600]]
         self.number = 3
@@ -130,7 +118,8 @@ class Objective(pygame.sprite.Sprite):
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image  = pygame.image.load("Obstacle.png").convert()
+        self.image  = pygame.image.load("boulder.png").convert()
+        self.image.set_colorkey(ALPHA)
         self.coord  = [[200,400],[400,600],[400,300]]
         self.rect   = self.image.get_rect()
         self.number = 3

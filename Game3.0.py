@@ -32,6 +32,7 @@ def main():
 
     objlist = pygame.sprite.Group()
     obslist = pygame.sprite.Group()
+    enemylist = pygame.sprite.Group()
 
     for obj in range(3):
         objective = Classes.Objective()
@@ -44,7 +45,13 @@ def main():
         obstacle.rect.x = obstacle.coord[obs][0]
         obstacle.rect.y = obstacle.coord[obs][1]
         obslist.add(obstacle)
-       
+
+    for ene in range(2):
+        enecoord = [[300,500],[500,500]]
+        enemy = Classes.Enemy1()
+        enemy.rect.x = enecoord[ene][0]
+        enemy.rect.y = enecoord[ene][1]
+        enemylist.add(enemy)       
 
 
     while not done:
@@ -98,16 +105,16 @@ def main():
         if player.change[1] > 0 or player.change[1] < 0:
             player.change[0] 
 
+        enemylist.update()
         
-        if player.rect.colliderect(obstacle.rect):
-            if player.change[0] > 0:
-                player.rect.right = obstacle.rect.left
-            if player.change[0] < 0:
-                player.rect.left = obstacle.rect.right
-            if player.change[1] > 0:
-                player.rect.bottom = obstacle.rect.top
-            if player.change[1] < 0:
-                player.rect.top = obstacle.rect.bottom
+        for obstacle in obslist:
+            if player.rect.colliderect(obstacle.rect):
+                # print("Foo")
+                # player.change = [0, 0]
+                player.pos[0] -= player.change[0]
+                player.pos[1] -= player.change[1]
+
+                player.change[:] = [0, 0]
 
         player.pos[0] += player.change[0]
         player.pos[1] += player.change[1]
@@ -153,6 +160,7 @@ def main():
 
         objlist.draw(screen)
         obslist.draw(screen)
+        enemylist.draw(screen)
 
         player.Image.set_colorkey(ALPHA)
         screen.blit(player.Image,player.pos)         #Draw Player

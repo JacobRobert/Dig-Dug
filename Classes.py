@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.rotation = "Right"  
         self.rotatable = False  
-        self.life = 10
+        self.life = 1
         self.pos = [200, 200]
         self.change = [0,0]
         self.queue = 0
@@ -56,6 +56,7 @@ class Player(pygame.sprite.Sprite):
 
     def die(self):
         self.Image = pygame.transform.rotate(self.Image,1)
+        #self.change = [0,0]
 
 class Enemy1(pygame.sprite.Sprite):
     def __init__(self):
@@ -121,7 +122,7 @@ class Objective(pygame.sprite.Sprite):
         self.image  = pygame.image.load("Crystal.png").convert()
         self.image.set_colorkey(ALPHA)
         self.rect   = self.image.get_rect()
-        self.coord  = [[100,400],[300,600],[700,600]]
+        self.coord  = [[0,400],[400,600],[1000,500]]
         self.number = 3
         
 
@@ -130,9 +131,11 @@ class Obstacle(pygame.sprite.Sprite):
         super().__init__()
         self.image  = pygame.image.load("boulder.png").convert()
         self.image.set_colorkey(ALPHA)
-        self.coord  = [[200,400],[400,600],[400,300]]
+        self.coord  = [[1200,300],[1200,400],[1200,500],[1200,600],
+                       [0,300],[100,300],[0,500],[500,500],[600,500],[700,500],
+                       [900,300],[900,400],[1000,300],[1100,300],[1100,400]]
         self.rect   = self.image.get_rect()
-        self.number = 3
+        self.number = 16
             
                     
 class Tiles():
@@ -177,10 +180,10 @@ class Tiles():
         self.list  = pygame.sprite.Group()
         self.tilemap = [#1      2      3      4      5      6      7      8      9      10     11     12     13
                         [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],#1
-                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],
-                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],
-                        [0b1111,0b1111,0b1110,0b1100,0b1100,0b1100,0b1100,0b1100,0b1100,0b1100,0b1101,0b1111,0b1111],
-                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],
+                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1011,0b1111,0b1111,0b1111,0b1111],
+                        [0b1111,0b1110,0b1100,0b1100,0b1101,0b1111,0b1111,0b1111,0b0011,0b1111,0b1111,0b1111,0b1111],
+                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b0011,0b1111,0b1111,0b1111,0b1111],
+                        [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b0111,0b1111,0b1111,0b1111,0b1111],
                         [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],
                         [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],
                         [0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111,0b1111],

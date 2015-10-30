@@ -22,17 +22,15 @@ def main():
         
     background = pygame.image.load("Level.png").convert()
     explosion  = pygame.image.load("Explosion.png").convert()
-    #explosion.set_colorkey(ALPHA)
+    explosion.set_colorkey(ALPHA)
     
-    font = pygame.font.SysFont('Calibri', 25, True, False)  #Set Function
+    font = pygame.font.SysFont('Calibri', 120, True, False)  #Set Function
 
     done = False                                            #Set While Variable
     clock = pygame.time.Clock()
     
     obdiro = 0b1111
     indiro = 0b1111
-
-    alive = 10
 
     objlist = pygame.sprite.Group()
     obslist = pygame.sprite.Group()
@@ -46,14 +44,14 @@ def main():
         objective.rect.y = objective.coord[obj][1]
         objlist.add(objective)
             
-    for obs in range(3):
+    for obs in range(15):
         obstacle = Classes.Obstacle()
         obstacle.rect.x = obstacle.coord[obs][0]
         obstacle.rect.y = obstacle.coord[obs][1]
         obslist.add(obstacle)
 
     for ene in range(2):
-        enecoord = [[300,500],[500,500]]
+        enecoord = [[400,400],[800,500]]
         enemy = Classes.Enemy1()
         enemy.rect.x = enecoord[ene][0]
         enemy.rect.y = enecoord[ene][1]
@@ -66,12 +64,10 @@ def main():
     
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:           #X Exits
-                done = True
                 main()
                 
             if event.type == pygame.KEYDOWN:        #Arrows Move
                 if event.key == pygame.K_ESCAPE:
-                    done = True
                     main()
                 
                 if event.key == pygame.K_LEFT:      
@@ -159,19 +155,13 @@ def main():
         for objective in objcollide:
             player.inventory +=1
 
-        deathcollide = pygame.sprite.spritecollide(player,deathlist,False)
-        for death in deathcollide:
-            player.life = 0
-            player.die()
-        if player.life == 0:
-            screen.blit(explosion,player.pos)
+                        
         backgroundcoord = [0,0]
-        screen.blit(background,backgroundcoord)
+        screen.blit(background,backgroundcoord)    
 
         for enemy in enemylist:
             if enemy.change == [0, 0]:
-                # if random.random() > 0.10:
-                    enemy.change[:] = random.choice([(-1, 0), (1, 0), (0, 1), (0, -1)])
+                enemy.change[:] = random.choice([(-1, 0), (1, 0), (0, 1), (0, -1)])
             if (enemy.rect.y + enemy.rect.x) % 100 == 0:
                 x = enemy.rect.x // 100
                 y = enemy.rect.y // 100 - 2
@@ -202,32 +192,44 @@ def main():
                 enemy.image = enemy.imagel
             enemy.image.set_colorkey(ALPHA)
 
-            if enemy.delay == 180:
-                projectile = Classes.projectile((enemy.rect.x,enemy.rect.y),enemy.diro)
-                projectilelist.add(projectile)
-                deathlist.add(projectile)
-                enemy.delay = 0
-            else:
-                enemy.delay += 1
-
-            for proj in projectilelist :
-                projectile.update()
-        
+       
         for row in range(13):
             for column in range(12):
                 screen.blit(tunnels.texture[tunnels.tilemap[row][column]],(column*100,row*100+200))
 
         objlist.draw(screen)
         obslist.draw(screen)
-        projectilelist.draw(screen)
         enemylist.draw(screen)
         
 
         player.Image.set_colorkey(ALPHA)
-        screen.blit(player.Image,player.pos)         #Draw Player
+        screen.blit(player.Image,player.pos)        #Draw Player
+
+        deathcollide = pygame.sprite.spritecollide(player,deathlist,False)
+        for death in deathcollide:
+            player.life = 0
+            deathtime = 30
+            if deathtime > 0:
+                player.die()
+                screen.blit(explosion,player.pos)
+                deathtime -= 1
+                
+                gameover = font.render("GAME OVER", True, WHITE)
+                screen.blit(gameover, [300,300])    
+            else:
+                done = True
+
+        if player.inventory == 3:
+            if player.life == 1:
+                youwin   = font.render("You Win!", True, WHITE)
+                screen.blit(youwin, [300,300])
+        
         pygame.display.flip()
         clock.tick(60)                                      #Set Framerate
-        
+
+    for reset in pygame.event.get():
+        main()
+
 if __name__ == "__main__":
     main()
 

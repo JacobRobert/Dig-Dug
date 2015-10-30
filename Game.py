@@ -37,6 +37,8 @@ def main():
     objlist = pygame.sprite.Group()
     obslist = pygame.sprite.Group()
     enemylist = pygame.sprite.Group()
+    deathlist = pygame.sprite.Group()
+    projectilelist = pygame.sprite.Group()
 
     for obj in range(3):
         objective = Classes.Objective()
@@ -55,7 +57,8 @@ def main():
         enemy = Classes.Enemy1()
         enemy.rect.x = enecoord[ene][0]
         enemy.rect.y = enecoord[ene][1]
-        enemylist.add(enemy)       
+        enemylist.add(enemy)
+        deathlist.add(enemy)
 
 
     while not done:
@@ -112,8 +115,6 @@ def main():
             player.change[1] 
         if player.change[1] > 0 or player.change[1] < 0:
             player.change[0] 
-
-        enemylist.update()
         
         for obstacle in obslist:
             if player.rect.colliderect(obstacle.rect):
@@ -141,11 +142,6 @@ def main():
         player.rect.y = player.pos[1]
 
         prolist = pygame.sprite.Group()
-        if enemy.delay == 120:
-            projectile = Classes.projectile()
-            prolist.add(projectile)
-            enemylist.add(projectile)
-            projectile.update((enemy.rect.x,enemy.rect.y),enemy.diro)
 
         if player.change == [0,0]:
             player.tunnelpos[0] = player.pos[0]//100
@@ -163,7 +159,7 @@ def main():
         for objective in objcollide:
             player.inventory +=1
 
-        deathcollide = pygame.sprite.spritecollide(player,enemylist,False)
+        deathcollide = pygame.sprite.spritecollide(player,deathlist,False)
         for death in deathcollide:
             player.life = 0
             player.die()
@@ -171,6 +167,51 @@ def main():
             screen.blit(explosion,player.pos)
         backgroundcoord = [0,0]
         screen.blit(background,backgroundcoord)
+
+        for enemy in enemylist:
+            if enemy.change == [0, 0]:
+                # if random.random() > 0.10:
+                    enemy.change[:] = random.choice([(-1, 0), (1, 0), (0, 1), (0, -1)])
+            if (enemy.rect.y + enemy.rect.x) % 100 == 0:
+                x = enemy.rect.x // 100
+                y = enemy.rect.y // 100 - 2
+                tile = tunnels.tilemap[y][x]
+                if random.random() > 0.66:
+                    enemy.change[:] = [0, 0]
+                elif y == 0:
+                    enemy.change[:] = [0, 1]
+                elif tile & 0b1000 and enemy.change[1] == -1:
+                    enemy.change[1] = 0
+                elif tile & 0b0100 and enemy.change[1] == 1:
+                    enemy.change[1] = 0
+                elif tile & 0b0010 and enemy.change[0] == -1:
+                    enemy.change[0] = 0
+                elif tile & 0b0001 and enemy.change[0] == 1:
+                    enemy.change[0] = 0
+ 
+            x, y = enemy.change
+            if enemy.rect.y + y >= 600 or enemy.rect.y + y <= 0 or enemy.rect.x + x >= 1200 or enemy.rect.x + x <= 0:
+                enemy.change[:] = [0, 0]
+            else:
+                enemy.rect.y += y
+                enemy.rect.x += x
+                
+            if enemy.change[0] == 1:
+                enemy.image = enemy.imager
+            if enemy.change[0] == -1:
+                enemy.image = enemy.imagel
+            enemy.image.set_colorkey(ALPHA)
+
+            if enemy.delay == 180:
+                projectile = Classes.projectile((enemy.rect.x,enemy.rect.y),enemy.diro)
+                projectilelist.add(projectile)
+                deathlist.add(projectile)
+                enemy.delay = 0
+            else:
+                enemy.delay += 1
+
+            for proj in projectilelist :
+                projectile.update()
         
         for row in range(13):
             for column in range(12):
@@ -178,7 +219,9 @@ def main():
 
         objlist.draw(screen)
         obslist.draw(screen)
+        projectilelist.draw(screen)
         enemylist.draw(screen)
+        
 
         player.Image.set_colorkey(ALPHA)
         screen.blit(player.Image,player.pos)         #Draw Player

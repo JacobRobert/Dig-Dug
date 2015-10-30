@@ -20,8 +20,10 @@ def main():
     player  = Classes.Player()  #Sets Class Variable
     tunnels = Classes.Tiles()
         
-    background  = pygame.image.load("Level.png").convert()
-
+    background = pygame.image.load("Level.png").convert()
+    explosion  = pygame.image.load("Explosion.png").convert()
+    #explosion.set_colorkey(ALPHA)
+    
     font = pygame.font.SysFont('Calibri', 25, True, False)  #Set Function
 
     done = False                                            #Set While Variable
@@ -29,6 +31,8 @@ def main():
     
     obdiro = 0b1111
     indiro = 0b1111
+
+    alive = 10
 
     objlist = pygame.sprite.Group()
     obslist = pygame.sprite.Group()
@@ -60,8 +64,12 @@ def main():
         for event in pygame.event.get():            
             if event.type == pygame.QUIT:           #X Exits
                 done = True
+                main()
                 
             if event.type == pygame.KEYDOWN:        #Arrows Move
+                if event.key == pygame.K_ESCAPE:
+                    done = True
+                    main()
                 
                 if event.key == pygame.K_LEFT:      
                     player.easy = True
@@ -109,8 +117,6 @@ def main():
         
         for obstacle in obslist:
             if player.rect.colliderect(obstacle.rect):
-                # print("Foo")
-                # player.change = [0, 0]
                 player.pos[0] -= player.change[0]
                 player.pos[1] -= player.change[1]
 
@@ -131,9 +137,15 @@ def main():
         else:
             player.change = [0,0]
             
-                
         player.rect.x = player.pos[0]
         player.rect.y = player.pos[1]
+
+        prolist = pygame.sprite.Group()
+        if enemy.delay == 120:
+            projectile = Classes.projectile()
+            prolist.add(projectile)
+            enemylist.add(projectile)
+            projectile.update((enemy.rect.x,enemy.rect.y),enemy.diro)
 
         if player.change == [0,0]:
             player.tunnelpos[0] = player.pos[0]//100
@@ -150,7 +162,13 @@ def main():
 
         for objective in objcollide:
             player.inventory +=1
-        
+
+        deathcollide = pygame.sprite.spritecollide(player,enemylist,False)
+        for death in deathcollide:
+            player.life = 0
+            player.die()
+        if player.life == 0:
+            screen.blit(explosion,player.pos)
         backgroundcoord = [0,0]
         screen.blit(background,backgroundcoord)
         
@@ -167,8 +185,6 @@ def main():
         pygame.display.flip()
         clock.tick(60)                                      #Set Framerate
         
-    pygame.quit()
-
 if __name__ == "__main__":
     main()
 

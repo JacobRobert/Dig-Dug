@@ -8,10 +8,9 @@ ALPHA = (255,   0, 255)
 class Player(pygame.sprite.Sprite):                             
     def __init__(self):
         super().__init__()
-
         self.rotation = "Right"  
         self.rotatable = False  
-        self.life = 1
+        self.life = 10
         self.pos = [200, 200]
         self.change = [0,0]
         self.queue = 0
@@ -38,21 +37,10 @@ class Player(pygame.sprite.Sprite):
 
         if self.pos[y] % SUBTILES == 0:
             self.change[x] = self.speed * diro
-
-        for o in range(3):
-            if self.rect.colliderect(obstacle.rect):
-                if self.change[0] > 0:
-                    self.rect.right = obstacle.rect.left
-                if self.change[0] < 0:
-                    self.rect.left = obstacle.rect.right
-                if self.change[1] > 0:
-                    self.rect.bottom = obstacle.rect.top
-                if self.change[1] < 0:
-                    self.rect.top = obstacle.rect.bottom
                   
     def rotate(self, con1, con2, rota1, rota2, fin1, fin2):
-        if self.rotatable:      #If its allowed to rotate
-            if self.easy:       #If its rotating to left or right
+        if self.rotatable:      #If it's allowed to rotate
+            if self.easy:       #If it's rotating to left or right
                 self.rotation = rota1
             if self.rotation in con1:
                 self.rotation = rota1
@@ -66,6 +54,9 @@ class Player(pygame.sprite.Sprite):
                 
             self.rotatable = False
 
+    def die(self):
+        self.Image = pygame.transform.rotate(self.Image,1)
+
 class Enemy1(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -74,36 +65,69 @@ class Enemy1(pygame.sprite.Sprite):
         self.image = self.imager
         self.image.set_colorkey(ALPHA)
         self.rect  = self.image.get_rect()
-        self.change = [0,0]
         self.tunne = [3,4]
-        self.diro  = "left"
+        self.diro  = -1
         self.delay = 0
         
     def update(self):
         if self.delay == 120:
-            if self.diro == "left":
-                self.diro = "right"
+            if self.diro == -1:
+                self.diro = 1
                 self.image = self.imager
                 self.image.set_colorkey(ALPHA)
-            if self.diro == "right":
-                self.diro = "left"
+            if self.diro == 1:
+                self.diro = -1
                 self.image = self.imagel
                 self.image.set_colorkey(ALPHA)
+
             self.delay = 0
         else:
             self.delay += 1
-        print(self.delay)
 
-class projectile:
+
+class projectile(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.imager1 = pygame.image.load("water1.png").convert()
-        self.imager2 = pygame.image.load("water2.png").convert()
-        self.imager3 = pygame.image.load("water3.png").convert()
-        self.imagel1 = pygame.transform.flip(self.imager1,True,False)
-        self.imagel2 = pygame.transform.flip(self.imager2,True,False)
-        self.imagel3 = pygame.transform.flip(self.imager3,True,False)
+        self.imagera = pygame.image.load("water1.png").convert()
+        self.imagerb = pygame.image.load("water2.png").convert()
+        self.imagerc = pygame.image.load("water3.png").convert()
+        self.imagela = pygame.transform.flip(self.imagera,True,False)
+        self.imagelb = pygame.transform.flip(self.imagerb,True,False)
+        self.imagelc = pygame.transform.flip(self.imagerc,True,False)
         
+        self.image   = self.imagera
+        self.rect    = self.image.get_rect()
+        
+    def update(self,enemycoord,enemydiro):
+        self.rect.x = enemycoord[0] + 100 * enemydiro
+        self.rect.y = enemycoord[1]
+        delay = 0
+        self.image.set_colorkey(ALPHA)
+        if enemydiro == 1:#right
+            self.image = self.imagera
+        if enemydiro == -1:#left
+            self.image = self.imagela
+        if delay < 5:
+            delay += 1
+            self.rect.x += 1 * enemydiro
+        if delay > 4 and delay < 9:
+            delay += 1
+            self.rect.x += 1 * enemydiro
+            if self.image == self.imagera:
+                self.image = self.imagerb
+            if self.image == self.imagela:
+                self.image = self.imagelb
+        if delay > 8 and delay < 13:
+            delay += 1
+            self.rect.x += 1 * enemydiro
+            if self.image == self.imagerb:
+                self.image = self.imagerc
+            if self.image == self.imagelb:
+                self.image = self.imagelc
+        else:
+            pygame.sprite.kill
+            
+            
 
 class Objective(pygame.sprite.Sprite):
     def __init__(self):

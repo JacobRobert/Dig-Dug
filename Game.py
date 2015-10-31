@@ -24,7 +24,10 @@ def main():
     explosion  = pygame.image.load("Explosion.png").convert()
     explosion.set_colorkey(ALPHA)
     
-    font = pygame.font.SysFont('Calibri', 120, True, False)  #Set Function
+    gameover = pygame.image.load("game over.png").convert()
+    gameover.set_alpha(1)
+    youwin   = pygame.image.load("you win.png").convert()
+    youwin.set_alpha(1)
 
     done = False                                            #Set While Variable
     clock = pygame.time.Clock()
@@ -36,7 +39,6 @@ def main():
     obslist = pygame.sprite.Group()
     enemylist = pygame.sprite.Group()
     deathlist = pygame.sprite.Group()
-    projectilelist = pygame.sprite.Group()
 
     for obj in range(3):
         objective = Classes.Objective()
@@ -137,8 +139,6 @@ def main():
         player.rect.x = player.pos[0]
         player.rect.y = player.pos[1]
 
-        prolist = pygame.sprite.Group()
-
         if player.change == [0,0]:
             player.tunnelpos[0] = player.pos[0]//100
             player.tunnelpos[1] = player.pos[1]//100 -2
@@ -183,8 +183,8 @@ def main():
             if enemy.rect.y + y >= 600 or enemy.rect.y + y <= 0 or enemy.rect.x + x >= 1200 or enemy.rect.x + x <= 0:
                 enemy.change[:] = [0, 0]
             else:
-                enemy.rect.y += y
-                enemy.rect.x += x
+                enemy.rect.y += y * 2
+                enemy.rect.x += x * 2
                 
             if enemy.change[0] == 1:
                 enemy.image = enemy.imager
@@ -212,17 +212,15 @@ def main():
             if deathtime > 0:
                 player.die()
                 screen.blit(explosion,player.pos)
-                deathtime -= 1
-                
-                gameover = font.render("GAME OVER", True, WHITE)
-                screen.blit(gameover, [300,300])    
+                deathtime -= 1 
             else:
                 done = True
 
+        if player.life == 0:        
+            screen.blit(gameover, [0,0])
         if player.inventory == 3:
-            if player.life == 1:
-                youwin   = font.render("You Win!", True, WHITE)
-                screen.blit(youwin, [300,300])
+            screen.blit(youwin, [0,0])
+
         
         pygame.display.flip()
         clock.tick(60)                                      #Set Framerate
